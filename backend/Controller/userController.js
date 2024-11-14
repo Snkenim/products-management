@@ -1,13 +1,12 @@
-const { ObjectId } = require("mongodb")
-
-const createUser = async (req, res) => {
+const createUser = async (req, res, db) => {
     try {
         const { name, email, password } = req.body;
-        const result = await req.db.collection("users").insertOne({ name, email, password });
-        res.send("Done")
+        
+        const response = await db.collection('users').insertOne({ name, email, password });
+        res.status(201).send({ message: 'User created successfully', data: response });
     } catch (error) {
-        res.send(error)
+        res.status(500).send(`Error: ${error.message}`);
     }
-}
+};
 
-module.exports = createUser
+module.exports = { createUser };
